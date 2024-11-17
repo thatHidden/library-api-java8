@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 
 @Component
-public class ClientValidator {
+public class ClientValidator implements Validator<Client> {
 
     public void validate(Client client) {
         checkFullName(client.getFullName());

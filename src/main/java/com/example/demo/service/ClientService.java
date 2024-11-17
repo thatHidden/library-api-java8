@@ -3,7 +3,7 @@ package com.example.demo.service;
 import com.example.demo.exception.EntityNotFoundException;
 import com.example.demo.model.Client;
 import com.example.demo.repository.ClientRepository;
-import com.example.demo.service.validator.ClientValidator;
+import com.example.demo.service.validator.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +17,7 @@ import java.util.UUID;
 public class ClientService {
 
     private final ClientRepository clientRepository;
-    private final ClientValidator clientValidator;
+    private final Validator<Client> clientValidator;
 
     @Transactional(readOnly = true)
     public Client findOne(UUID id) {

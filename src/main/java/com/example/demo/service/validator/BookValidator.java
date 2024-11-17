@@ -6,7 +6,7 @@ import com.example.demo.model.Book;
 import org.springframework.stereotype.Component;
 
 @Component
-public class BookValidator {
+public class BookValidator implements Validator<Book> {
 
     public void validate(Book book) {
         checkTitle(book.getTitle());

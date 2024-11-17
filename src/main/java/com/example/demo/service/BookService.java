@@ -4,7 +4,7 @@ import com.example.demo.exception.EntityConflictException;
 import com.example.demo.exception.EntityNotFoundException;
 import com.example.demo.model.Book;
 import com.example.demo.repository.BookRepository;
-import com.example.demo.service.validator.BookValidator;
+import com.example.demo.service.validator.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class BookService {
 
     private final BookRepository bookRepository;
-    private final BookValidator bookValidator;
+    private final Validator<Book> bookValidator;
 
     @Transactional(readOnly = true)
     public Book findOne(String id) {
