@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование группы</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="container">
+    <div class="column">
+        <div class="column">
+            <form th:action="@{/book/update/{id}(id=${bookId})}" th:object="${commandBookDto}" method="post">
+                <div class="form-field">
+                    <label for="groupId">Автор</label>
+                    <input type="text" th:field="*{author}" id="groupId">
+                </div>
+                <div th:if="${#fields.hasErrors('author')}" th:errors="*{author}" class="error-message"></div>
+                <div class="form-field">
+                    <label for="subjectId">Название</label>
+                    <input type="text" th:field="*{title}" id="subjectId">
+                </div>
+                <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="error-message"></div>
+                <br>
+                <div class="form-field-button">
+                    <button type="submit" class="btn btn-info">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>

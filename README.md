@@ -14,5 +14,5 @@ API библиотеки
 
 5. Запустить приложение 
    ```shell
-   java -jar library-1.0.0-SNAPSHOT.jar
+   java -jar library-1.1.0-SNAPSHOT.jar
    ```

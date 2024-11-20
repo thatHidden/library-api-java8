@@ -1,60 +1,43 @@
 package com.example.demo.controller;
 
-
-import com.example.demo.dto.response.ErrorResponseDto;
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.EntityConflictException;
 import com.example.demo.exception.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.servlet.http.HttpServletRequest;
-import java.sql.Timestamp;
-import java.time.Instant;
-
+@ControllerAdvice(annotations = Controller.class)
 @Slf4j
-@RestControllerAdvice
 public class DefaultControllerAdvice {
 
     @ExceptionHandler(EntityNotFoundException.class)
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    public ErrorResponseDto handleEntityNotFoundException(HttpServletRequest request, EntityNotFoundException e) {
+    public String handleEntityNotFoundException(EntityNotFoundException e, Model model) {
         log.error(e.getMessage(), e);
-        return buildErrorResponse(request, e.getMessage());
+        model.addAttribute("errorMessage", e.getMessage());
+        return "error";
     }
 
     @ExceptionHandler(BadRequestException.class)
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ErrorResponseDto handleValidationException(HttpServletRequest request, BadRequestException e) {
+    public String handleValidationException(BadRequestException e, Model model) {
         log.error(e.getMessage(), e);
-        return buildErrorResponse(request, e.getMessage());
+        model.addAttribute("errorMessage", e.getMessage());
+        return "error";
     }
 
     @ExceptionHandler(EntityConflictException.class)
-    @ResponseStatus(value = HttpStatus.CONFLICT)
-    public ErrorResponseDto handleEntityConflictException(HttpServletRequest request, BadRequestException e) {
+    public String handleEntityConflictException(BadRequestException e, Model model) {
         log.error(e.getMessage(), e);
-        return buildErrorResponse(request, e.getMessage());
+        model.addAttribute("errorMessage", e.getMessage());
+        return "error";
     }
 
     @ExceptionHandler(Throwable.class)
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ErrorResponseDto handleBaseException(HttpServletRequest request, Throwable e) {
-        String message = "unexpected error";
-        log.error(message, e);
-        return buildErrorResponse(request, message);
-    }
-
-    private ErrorResponseDto buildErrorResponse(HttpServletRequest request, String message) {
-        return ErrorResponseDto.builder()
-                .path(request.getServletPath())
-                .method(request.getMethod())
-                .timeStamp(Timestamp.from(Instant.now()).toString())
-                .message(message)
-                .build();
+    public String handleBaseException(Throwable e, Model model) {
+        log.error("unexpected error", e);
+        model.addAttribute("errorMessage", "unexpected error");
+        return "error";
     }
 }
-

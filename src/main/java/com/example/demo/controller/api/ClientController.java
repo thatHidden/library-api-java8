@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package com.example.demo.controller.api;
 
 import com.example.demo.dto.request.CommandClientDto;
 import com.example.demo.dto.response.ResponseClientDto;

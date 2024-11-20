@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Займы</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<div class="container" th:insert="fragments :: header"></div>
+
+<div class="container">
+    <div class="column">
+        <div class="main-borrows">
+            <h2>Займы</h2>
+            <table>
+                <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Книга</th>
+                    <th>Клиент</th>
+                    <th>Дата</th>
+                    <th>Действие</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="borrow : ${borrows}">
+                    <td th:text="${borrow.getId()}"></td>
+                    <td th:text="${borrow.getBook().title}"></td>
+                    <td th:text="${borrow.getClient().fullName}"></td>
+                    <td th:text="${borrow.getDate()}"></td>
+                    <td class="actions">
+                        <a th:href="@{/borrow/delete/{id}(id=${borrow.getId()})}">Удалить</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div>
+                    <span th:if="${borrowsTotalPages > 1}">
+                        <span th:if="${borrowsCurrentPage > 0}">
+                            <a th:href="@{|http://localhost:8080/borrow?page=${borrowsCurrentPage - 1}|}">Назад</a>
+                        </span>
+                        <span th:each="i : ${#numbers.sequence(0, borrowsTotalPages - 1)}">
+                            <a th:if="${borrowsTotalPages > 1}"
+                               th:href="@{|http://localhost:8080/borrow?page=${i}|}"
+                               th:text="${i + 1}" th:classappend="${borrowsCurrentPage == i} ? 'current' : ''">1</a>
+                            <span th:if="${borrowsTotalPages == 1}" th:text="${i + 1}"
+                                  th:classappend="${borrowsCurrentPage == i} ? 'current' : ''">1</span>
+                        </span>
+                        <span th:if="${borrowsCurrentPage < borrowsTotalPages - 1}">
+                            <a th:href="@{|http://localhost:8080/borrow?page=${borrowsCurrentPage + 1}|}">Вперед</a>
+                        </span>
+                    </span>
+            </div>
+        </div>
+
+        <div class="column">
+
+            <form th:action="@{/borrow/add}" th:object="${commandBorrowDto}" method="post">
+                <div class="form-field">
+                    <label for="bookIsbn">ISBN книги</label>
+                    <input type="text" th:field="*{bookIsbn}" id="bookIsbn">
+                </div>
+                <div th:if="${#fields.hasErrors('bookIsbn')}" th:errors="*{bookIsbn}" class="error-message"></div>
+                <div class="form-field">
+                    <label for="clientId">id пользователя</label>
+                    <input type="text" th:field="*{clientId}" id="clientId">
+                </div>
+                <div th:if="${#fields.hasErrors('clientId')}" th:errors="*{clientId}" class="error-message"></div>
+                <br>
+                <div class="form-field-button">
+                    <button type="submit" class="btn btn-info">Добавить</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

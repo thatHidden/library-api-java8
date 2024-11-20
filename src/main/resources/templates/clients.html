@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Клиенты</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<div class="container" th:insert="fragments :: header"></div>
+
+<div class="container">
+    <div class="column">
+        <div class="main-clients">
+            <h2>Клиенты</h2>
+            <table>
+                <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Полное имя</th>
+                    <th>Дата рождения</th>
+                    <th>Действие</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="client : ${clients}">
+                    <td th:text="${client.getId()}"></td>
+                    <td th:text="${client.getFullName()}"></td>
+                    <td th:text="${client.getBirthDate()}"></td>
+                    <td class="actions">
+                        <a th:href="@{/client/update/{id}(id=${client.getId()})}">Изменить</a>
+                        <a th:href="@{/client/delete/{id}(id=${client.getId()})}">Удалить</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div>
+                    <span th:if="${clientsTotalPages > 1}">
+                        <span th:if="${clientsCurrentPage > 0}">
+                            <a th:href="@{|http://localhost:8080/client?page=${clientsCurrentPage - 1}|}">Назад</a>
+                        </span>
+                        <span th:each="i : ${#numbers.sequence(0, clientsTotalPages - 1)}">
+                            <a th:if="${clientsTotalPages > 1}"
+                               th:href="@{|http://localhost:8080/client?page=${i}|}"
+                               th:text="${i + 1}" th:classappend="${clientsCurrentPage == i} ? 'current' : ''">1</a>
+                            <span th:if="${clientsTotalPages == 1}" th:text="${i + 1}"
+                                  th:classappend="${clientsCurrentPage == i} ? 'current' : ''">1</span>
+                        </span>
+                        <span th:if="${clientspCurrentPage < clientsTotalPages - 1}">
+                            <a th:href="@{|http://localhost:8080/client?page=${clientsCurrentPage + 1}|}">Вперед</a>
+                        </span>
+                    </span>
+            </div>
+        </div>
+
+        <div class="column">
+
+            <form th:action="@{/client/add}" th:object="${commandClientDto}" method="post">
+                <div class="form-field">
+                    <label for="fullName">Полное имя</label>
+                    <input type="text" th:field="*{fullName}" id="fullName">
+                </div>
+                <div th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}" class="error-message"></div>
+                <div class="form-field">
+                    <label for="birthDate">Дата рождения</label>
+                    <input type="date" th:field="*{birthDate}" id="birthDate"/>
+                </div>
+                <div th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}" class="error-message"></div>
+                <br>
+                <div class="form-field-button">
+                    <button type="submit" class="btn btn-info">Добавить</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

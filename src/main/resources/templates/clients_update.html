@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование группы</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="container">
+    <div class="column">
+        <div class="column">
+            <form th:action="@{/client/update/{id}(id=${clientId})}" th:object="${commandClientDto}" method="post">
+                <div class="form-field">
+                    <label for="groupId">Полное имя</label>
+                    <input type="text" th:field="*{fullName}" id="groupId">
+                </div>
+                <div th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}" class="error-message"></div>
+                <div class="form-field">
+                    <label for="birthDate">Дата рождения</label>
+                    <input type="date" th:field="*{birthDate}" id="birthDate"/>
+                </div>
+                <div th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}" class="error-message"></div>
+                <br>
+                <div class="form-field-button">
+                    <button type="submit" class="btn btn-info">Изменить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>

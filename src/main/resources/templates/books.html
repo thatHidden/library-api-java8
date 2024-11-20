@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Книги</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<div class="container" th:insert="fragments :: header"></div>
+
+<div class="container">
+    <div class="column">
+        <div class="main-books">
+            <h2>Книги</h2>
+            <table>
+                <thead>
+                <tr>
+                    <th>ISBN</th>
+                    <th>Автор</th>
+                    <th>Название</th>
+                    <th>Действие</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="book : ${books}">
+                    <td th:text="${book.getIsbn()}"></td>
+                    <td th:text="${book.getAuthor()}"></td>
+                    <td th:text="${book.getTitle()}"></td>
+                    <td class="actions">
+                        <a th:href="@{/book/update/{id}(id=${book.getIsbn()})}">Изменить</a>
+                        <a th:href="@{/book/delete/{id}(id=${book.getIsbn()})}">Удалить</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div>
+                    <span th:if="${booksTotalPages > 1}">
+                        <span th:if="${booksCurrentPage > 0}">
+                            <a th:href="@{|http://localhost:8080/book?page=${booksCurrentPage - 1}|}">Назад</a>
+                        </span>
+                        <span th:each="i : ${#numbers.sequence(0, booksTotalPages - 1)}">
+                            <a th:if="${booksTotalPages > 1}"
+                               th:href="@{|http://localhost:8080/book?page=${i}|}"
+                               th:text="${i + 1}" th:classappend="${booksCurrentPage == i} ? 'current' : ''">1</a>
+                            <span th:if="${booksTotalPages == 1}" th:text="${i + 1}"
+                                  th:classappend="${booksCurrentPage == i} ? 'current' : ''">1</span>
+                        </span>
+                        <span th:if="${booksCurrentPage < booksTotalPages - 1}">
+                            <a th:href="@{|http://localhost:8080/book?page=${booksCurrentPage + 1}|}">Вперед</a>
+                        </span>
+                    </span>
+            </div>
+        </div>
+
+        <div class="column">
+
+            <form th:action="@{/book/add}" th:object="${commandBookDto}" method="post">
+                <div class="form-field">
+                    <label for="dayId">ISBN</label>
+                    <input type="text" th:field="*{isbn}" id="dayId">
+                </div>
+                <div th:if="${#fields.hasErrors('isbn')}" th:errors="*{isbn}" class="error-message"></div>
+                <div class="form-field">
+                    <label for="groupId">Автор</label>
+                    <input type="text" th:field="*{author}" id="groupId">
+                </div>
+                <div th:if="${#fields.hasErrors('author')}" th:errors="*{author}" class="error-message"></div>
+                <div class="form-field">
+                    <label for="subjectId">Название</label>
+                    <input type="text" th:field="*{title}" id="subjectId">
+                </div>
+                <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="error-message"></div>
+                <br>
+                <div class="form-field-button">
+                    <button type="submit" class="btn btn-info">Добавить</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
